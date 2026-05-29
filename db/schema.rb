@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_29_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_29_130000) do
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.decimal "limit", precision: 10, scale: 2
@@ -45,8 +45,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_29_120000) do
   create_table "users", force: :cascade do |t|
     t.decimal "balance", precision: 10, scale: 2, default: "10000.0"
     t.datetime "created_at", null: false
+    t.integer "failed_attempts", default: 0
     t.decimal "income", precision: 10, scale: 2, default: "2000.0"
+    t.datetime "locked_until"
     t.string "name"
+    t.string "password_digest"
+    t.boolean "rate_limit_enabled", default: true
     t.integer "role", default: 1
     t.datetime "updated_at", null: false
   end
