@@ -1,0 +1,26 @@
+<div class="login-container" style="max-width: 600px; margin: 60px auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <h1 style="text-align: center; margin-bottom: 40px;">Finanzplaner Login</h1>
+  
+  <% if @users.any? %>
+    <form method="post" action="<%= sessions_path %>">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      
+      <div style="margin-bottom: 20px;">
+        <label for="user_id" style="display: block; margin-bottom: 8px; font-weight: bold;">Select a user:</label>
+        <select name="user_id" id="user_id" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
+          <option value="">-- Choose a user --</option>
+          <% @users.each do |user| %>
+            <option value="<%= user.id %>"><%= user.name %> (<%= role_name(user.role) %>)</option>
+          <% end %>
+        </select>
+      </div>
+      
+      <button type="submit" style="width: 100%; padding: 12px; background: #0066cc; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">
+        Login
+      </button>
+    </form>
+  <% else %>
+    <p style="text-align: center; color: #666;">No users available. Please seed the database first.</p>
+    <p style="text-align: center;">Run: <code>rails db:seed</code></p>
+  <% end %>
+</div>

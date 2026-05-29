@@ -1,0 +1,52 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h2>Products</h2>
+    <%= link_to "Add New Product", new_product_path, class: "btn btn-primary", style: "background: #0066cc; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
+  </div>
+
+  <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px;">
+    <strong>Filter by Category:</strong>
+    <% @categories.each do |category| %>
+      <%= link_to category.name, "#category-#{category.id}", style: "margin-left: 10px; color: #0066cc; text-decoration: none;" %>
+    <% end %>
+  </div>
+
+  <% if @products.any? %>
+    <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <thead>
+        <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+          <th style="padding: 12px; text-align: left;">Product</th>
+          <th style="padding: 12px; text-align: left;">Category</th>
+          <th style="padding: 12px; text-align: right;">Price</th>
+          <th style="padding: 12px; text-align: center;">Qty</th>
+          <th style="padding: 12px; text-align: right;">Total</th>
+          <th style="padding: 12px; text-align: center;">Status</th>
+          <th style="padding: 12px; text-align: center;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><%= link_to product.name, product_path(product), style: "color: #0066cc; text-decoration: none;" %></td>
+            <td style="padding: 12px;"><%= product.category.name %></td>
+            <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price, precision: 2) %></td>
+            <td style="padding: 12px; text-align: center;"><%= product.amount %></td>
+            <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price * product.amount, precision: 2) %></td>
+            <td style="padding: 12px; text-align: center;">
+              <span style="background: <% if product.status == 'purchased' %>#d4edda<% else %>#fff3cd<% end %>; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                <%= product.status.titleize %>
+              </span>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+              <%= link_to "View", product_path(product), style: "color: #0066cc; text-decoration: none; margin-right: 10px;" %>
+              <%= link_to "Edit", edit_product_path(product), style: "color: #ffa500; text-decoration: none; margin-right: 10px;" %>
+              <%= link_to "Delete", product_path(product), method: :delete, data: { confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none;" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="text-align: center; color: #999;">No products yet. <%= link_to "Create one", new_product_path, style: "color: #0066cc;" %></p>
+  <% end %>
+</div>

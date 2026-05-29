@@ -1,0 +1,14 @@
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <h2 style="margin-top: 0;"><%= @subscription.name %></h2>
+
+  <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <p style="margin: 0 0 10px 0;"><strong>Price:</strong> € <%= number_with_precision(@subscription.price, precision: 2) %> / <%= @subscription.frequency.titleize %></p>
+    <p style="margin: 0;"><strong>Started:</strong> <%= @subscription.start_date.strftime("%d.%m.%Y") %></p>
+  </div>
+
+  <div style="display: flex; gap: 10px;">
+    <%= link_to "Edit", edit_subscription_path(@subscription), style: "background: #ffa500; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
+    <%= link_to "Delete", subscription_path(@subscription), method: :delete, data: { confirm: "Are you sure?" }, style: "background: #ff0000; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
+    <%= link_to "Back", subscriptions_path, style: "background: #666; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
+  </div>
+</div>

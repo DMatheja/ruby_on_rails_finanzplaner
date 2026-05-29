@@ -1,0 +1,37 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h2>Subscriptions</h2>
+    <%= link_to "Add New Subscription", new_subscription_path, class: "btn btn-primary", style: "background: #0066cc; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
+  </div>
+
+  <% if @subscriptions.any? %>
+    <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <thead>
+        <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+          <th style="padding: 12px; text-align: left;">Name</th>
+          <th style="padding: 12px; text-align: right;">Price</th>
+          <th style="padding: 12px; text-align: center;">Frequency</th>
+          <th style="padding: 12px; text-align: left;">Start Date</th>
+          <th style="padding: 12px; text-align: center;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @subscriptions.each do |subscription| %>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><%= link_to subscription.name, subscription_path(subscription), style: "color: #0066cc; text-decoration: none;" %></td>
+            <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(subscription.price, precision: 2) %></td>
+            <td style="padding: 12px; text-align: center;"><%= subscription.frequency.titleize %></td>
+            <td style="padding: 12px;"><%= subscription.start_date.strftime("%d.%m.%Y") %></td>
+            <td style="padding: 12px; text-align: center;">
+              <%= link_to "View", subscription_path(subscription), style: "color: #0066cc; text-decoration: none; margin-right: 10px;" %>
+              <%= link_to "Edit", edit_subscription_path(subscription), style: "color: #ffa500; text-decoration: none; margin-right: 10px;" %>
+              <%= link_to "Delete", subscription_path(subscription), method: :delete, data: { confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none;" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="text-align: center; color: #999;">No subscriptions yet. <%= link_to "Create one", new_subscription_path, style: "color: #0066cc;" %></p>
+  <% end %>
+</div>

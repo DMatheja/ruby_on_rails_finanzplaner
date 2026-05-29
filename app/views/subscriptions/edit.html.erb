@@ -1,0 +1,40 @@
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <h2 style="margin-top: 0;">Edit Subscription</h2>
+
+  <% if @subscription.errors.any? %>
+    <div style="background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
+      <h4 style="margin-top: 0;"><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h4>
+      <ul style="margin: 0; padding-left: 20px;">
+        <% @subscription.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with(model: @subscription, local: true) do |form| %>
+    <div style="margin-bottom: 20px;">
+      <%= form.label :name, "Subscription Name", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.text_field :name, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :price, "Price (€)", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.number_field :price, step: 0.01, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :frequency, style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.select :frequency, { "Weekly" => "weekly", "Monthly" => "monthly" }, {}, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :start_date, "Start Date", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.date_field :start_date, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <%= form.submit "Update Subscription", style: "width: 100%; padding: 12px; background: #ffa500; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;" %>
+  <% end %>
+
+  <%= link_to "Back", subscription_path(@subscription), style: "color: #0066cc; text-decoration: none; margin-top: 20px; display: inline-block;" %>
+</div>

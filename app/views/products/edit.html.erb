@@ -1,0 +1,45 @@
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <h2 style="margin-top: 0;">Edit Product</h2>
+
+  <% if @product.errors.any? %>
+    <div style="background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
+      <h4 style="margin-top: 0;"><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h4>
+      <ul style="margin: 0; padding-left: 20px;">
+        <% @product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with(model: @product, local: true) do |form| %>
+    <div style="margin-bottom: 20px;">
+      <%= form.label :category_id, "Category", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.select :category_id, @categories.map { |c| [c.name, c.id] }, {}, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :name, "Product Name", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.text_field :name, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :price, "Price (€)", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.number_field :price, step: 0.01, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :amount, "Quantity", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.number_field :amount, min: 1, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :status, style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.select :status, { "Pending" => "pending", "Purchased" => "purchased" }, {}, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <%= form.submit "Update Product", style: "width: 100%; padding: 12px; background: #ffa500; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;" %>
+  <% end %>
+
+  <%= link_to "Back", product_path(@product), style: "color: #0066cc; text-decoration: none; margin-top: 20px; display: inline-block;" %>
+</div>

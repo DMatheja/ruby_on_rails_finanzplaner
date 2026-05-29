@@ -1,0 +1,73 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;">
+    <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <h2 style="margin-top: 0; margin-bottom: 15px;">Welcome, <%= @user.name %>!</h2>
+      <p style="margin: 0 0 10px 0; font-size: 18px;"><strong>Account Balance:</strong></p>
+      <p style="margin: 0; font-size: 32px; color: #0066cc;"><strong>€ <%= number_with_precision(@user.balance, precision: 2) %></strong></p>
+    </div>
+
+    <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <h3 style="margin-top: 0; margin-bottom: 15px;">Monthly Income</h3>
+      <p style="margin: 0; font-size: 32px; color: #4caf50;"><strong>€ <%= number_with_precision(@user.income, precision: 2) %></strong></p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; margin-bottom: 40px;">
+    <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <h3 style="margin-top: 0; margin-bottom: 10px;">Categories</h3>
+      <p style="margin: 0; font-size: 36px; color: #0066cc;"><strong><%= @categories.count %></strong></p>
+      <p style="margin: 10px 0 0 0; font-size: 14px; color: #999;">
+        <%= link_to "View all", categories_path, style: "color: #0066cc;" %>
+      </p>
+    </div>
+
+    <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <h3 style="margin-top: 0; margin-bottom: 10px;">Products</h3>
+      <% total_products = @categories.sum { |c| c.products.count } %>
+      <p style="margin: 0; font-size: 36px; color: #0066cc;"><strong><%= total_products %></strong></p>
+      <p style="margin: 10px 0 0 0; font-size: 14px; color: #999;">
+        <%= link_to "View all", products_path, style: "color: #0066cc;" %>
+      </p>
+    </div>
+
+    <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <h3 style="margin-top: 0; margin-bottom: 10px;">Subscriptions</h3>
+      <p style="margin: 0; font-size: 36px; color: #0066cc;"><strong><%= @user.subscriptions.count %></strong></p>
+      <p style="margin: 10px 0 0 0; font-size: 14px; color: #999;">
+        <%= link_to "View all", subscriptions_path, style: "color: #0066cc;" %>
+      </p>
+    </div>
+  </div>
+
+  <h2>Categories Overview</h2>
+  <% if @categories.any? %>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
+      <% @categories.each do |category| %>
+        <div style="background: white; border: 1px solid #eee; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <h3 style="margin-top: 0;">
+            <%= link_to category.name, category_path(category), style: "color: #0066cc; text-decoration: none;" %>
+          </h3>
+          
+          <% spent = category.spent_amount %>
+          <% limit = category.limit || 0 %>
+          <% percentage = limit > 0 ? (spent / limit * 100).round(0) : 0 %>
+          
+          <div style="margin-bottom: 15px;">
+            <p style="margin: 0 0 5px 0;"><strong>Budget:</strong> € <%= number_with_precision(limit, precision: 2) %></p>
+            <div style="background: #f0f0f0; border-radius: 4px; height: 20px; overflow: hidden;">
+              <div style="background: <% if percentage > 80 %>#ff6b6b<% elsif percentage > 50 %>#ffa500<% else %>#4caf50<% end %>; width: <%= percentage %>%; height: 100%;"></div>
+            </div>
+            <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">€ <%= number_with_precision(spent, precision: 2) %> / <%= percentage %>%</p>
+          </div>
+
+          <p style="margin: 0; font-size: 14px; color: #999;">
+            <%= link_to "View", category_path(category), style: "color: #0066cc; text-decoration: none;" %> |
+            <%= link_to "Add Product", new_product_path, style: "color: #0066cc; text-decoration: none;" %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="text-align: center; color: #999;">No categories yet. <%= link_to "Create one", new_category_path, style: "color: #0066cc;" %></p>
+  <% end %>
+</div>
