@@ -66,7 +66,14 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
     authorize_product_access
     @product.update(status: 'pending')
-    redirect_to purchased_products_path, notice: '#{@product.name} was added to the shopping list.'
+    redirect_to purchased_products_path, notice: "↩ '#{@product.name}' was added to the shopping list."
+  end
+
+  def mark_purchased
+    @product = Product.find(params[:id])
+    authorize_product_access
+    @product.update(status: 'purchased')
+    redirect_to products_path, notice: "✓ '#{@product.name}' wurde als gekauft markiert."
   end
 
   private
@@ -82,7 +89,9 @@ class ProductsController < ApplicationController
   end
 
   def authorize_product_access
-    unless current_user.admin? || current_user.id == @product.category.user_id
+    unless current_user.admin? ||
+      (current_user.user? && @product.category&.user_id == current_user.id) ||
+      (current_user.user? && @product.category_id.nil?)
       redirect_to root_path, alert: 'You do not have permission to access this product.'
     end
   end

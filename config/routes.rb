@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     end
     member do
       patch :rebuy
+      patch :mark_purchased
     end
   end
   resources :subscriptions

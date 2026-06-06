@@ -44,4 +44,17 @@
       <%= yield %>
     </div>
   </body>
+  <% if notice %>
+    <div id="toast" style="position: fixed; top: 20px; right: 20px; background: #28a745; color: white;
+        padding: 14px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 9999; font-size: 15px; max-width: 350px;">
+      <%= notice %>
+    </div>
+    <script>
+      setTimeout(() => {
+        const t = document.getElementById('toast');
+        if (t) t.style.display = 'none';
+      }, 3500);
+    </script>
+  <% end %>
 </html>

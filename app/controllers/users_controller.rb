@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def dashboard
     @user = current_user
-    @categories = @user.categories
+    @categories = @user.categories.includes(:products)
   end
 
   def index
