@@ -10,6 +10,13 @@ Rails.application.routes.draw do
   
   resources :users
   resources :categories
-  resources :products
+  resources :products do
+    collection do
+      get :purchased
+    end
+    member do
+      patch :rebuy
+    end
+  end
   resources :subscriptions
 end

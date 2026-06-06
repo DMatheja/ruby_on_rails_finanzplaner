@@ -52,6 +52,18 @@ class ProductsController < ApplicationController
     redirect_to products_url, notice: 'Product was successfully deleted.'
   end
 
+  def purchased
+    user_category_ids = current_user.categories.pluck(:id)
+    @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids).where(status: 'purchased').order(updated_at: :desc)
+  end
+
+  def rebuy
+    @product = Product.find(params[:id])
+    authorize_product_access
+    @product.update(status: 'pending')
+    redirect_to purchased_products_path, notice: '#{@product.name} was added to the shopping list.'
+  end
+
   private
 
   def set_product

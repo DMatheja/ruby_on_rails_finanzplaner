@@ -3,7 +3,9 @@
     <h2>Products</h2>
     <%= link_to "Add New Product", new_product_path, class: "btn btn-primary", style: "background: #0066cc; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
   </div>
-
+  <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px;">
+    <%= link_to 'Purchase History', purchased_products_path, style: "color: #0066cc; text-decoration: none; margin-left: 15px;" %>
+  </div>
   <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px;">
     <strong>Filter by Category:</strong>
     <% @categories.each do |category| %>

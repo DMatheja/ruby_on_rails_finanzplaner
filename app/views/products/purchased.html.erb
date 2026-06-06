@@ -1,0 +1,51 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+  <div style="display: flex; justify-content: space-between;
+              align-items: center; margin-bottom: 30px;">
+    <h2>Kaufhistorie</h2>
+    <%= link_to 'Back to the products', products_path,
+        style: "color: #0066cc; text-decoration: none;" %>
+  </div>
+ 
+  <% if @products.any? %>
+    <table style="width:100%; border-collapse:collapse;
+                  background:white; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+      <thead>
+        <tr style="background:#f5f5f5; border-bottom:2px solid #ddd;">
+          <th style="padding:12px; text-align:left;">Product</th>
+          <th style="padding:12px; text-align:left;">Category</th>
+          <th style="padding:12px; text-align:right;">Price</th>
+          <th style="padding:12px; text-align:center;">Amount</th>
+          <th style="padding:12px; text-align:right;">Total</th>
+          <th style="padding:12px; text-align:center;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px;"><%= product.name %></td>
+            <td style="padding:12px;">
+              <%= product.category&.name || 'Keine Kategorie' %>
+            </td>
+            <td style="padding:12px; text-align:right;">
+              € <%= number_with_precision(product.price, precision: 2) %>
+            </td>
+            <td style="padding:12px; text-align:center;"><%= product.amount %></td>
+            <td style="padding:12px; text-align:right;">
+              € <%= number_with_precision(product.price * product.amount, precision: 2) %>
+            </td>
+            <td style="padding:12px; text-align:center;">
+              <%= button_to 'Re-Add', rebuy_product_path(product),
+                  method: :patch,
+                  style: "background:#0066cc; color:white; border:none;
+                          padding:6px 14px; border-radius:4px; cursor:pointer;" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="text-align:center; color:#999;">
+      No products purchased yet.
+    </p>
+  <% end %>
+</div>
