@@ -2,7 +2,13 @@
   <h2 style="margin-top: 0;"><%= @product.name %></h2>
 
   <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-    <p style="margin: 0 0 10px 0;"><strong>Category:</strong> <%= link_to @product.category.name, category_path(@product.category), style: "color: #0066cc; text-decoration: none;" %></p>
+    <p style="margin: 0 0 10px 0;"><strong>Category:</strong>
+      <% if @product.category.present? %>
+        <%= link_to @product.category.name, category_path(@product.category), style: "color: #0066cc; text-decoration: none;" %>
+      <% else %>
+        <span style="color: #999;">No Category </span>
+      <% end %>
+    </p>
     <p style="margin: 0 0 10px 0;"><strong>Price:</strong> € <%= number_with_precision(@product.price, precision: 2) %></p>
     <p style="margin: 0 0 10px 0;"><strong>Quantity:</strong> <%= @product.amount %></p>
     <p style="margin: 0 0 10px 0;"><strong>Total:</strong> € <%= number_with_precision(@product.price * @product.amount, precision: 2) %></p>

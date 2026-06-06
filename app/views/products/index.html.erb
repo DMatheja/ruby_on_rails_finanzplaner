@@ -28,7 +28,7 @@
         <% @products.each do |product| %>
           <tr style="border-bottom: 1px solid #eee;">
             <td style="padding: 12px;"><%= link_to product.name, product_path(product), style: "color: #0066cc; text-decoration: none;" %></td>
-            <td style="padding: 12px;"><%= product.category.name %></td>
+            <td style="padding: 12px;"><%= product.category&.name || "No category" %></td>
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price, precision: 2) %></td>
             <td style="padding: 12px; text-align: center;"><%= product.amount %></td>
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price * product.amount, precision: 2) %></td>

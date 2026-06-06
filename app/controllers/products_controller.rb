@@ -4,8 +4,9 @@ class ProductsController < ApplicationController
   before_action :authorize_access, only: [:edit, :update, :destroy, :new, :create]
 
   def index
+    user_category_ids = current_user.categories.pluck(:id)
     @categories = current_user.categories
-    @products = Product.joins(:category).where(categories: { user_id: current_user.id })
+    @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids)
   end
 
   def show
@@ -18,11 +19,15 @@ class ProductsController < ApplicationController
   end
 
   def create
-    category = current_user.categories.find(product_params[:category_id])
-    @product = category.products.build(product_params)
+    @product = Product.new(product_params)
+    if product_params[:category_id].present?
+      category = current_user.categories.find(product_params[:category_id])
+      @product.category = category
+    end
     if @product.save
       redirect_to @product, notice: 'Product was successfully created.'
     else
+      @categories = current_user.categories
       render :new
     end
   end

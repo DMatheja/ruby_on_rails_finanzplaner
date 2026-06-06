@@ -1,6 +1,6 @@
 # app/models/product.rb
 class Product < ApplicationRecord
-  belongs_to :category
+  belongs_to :category, optional: true
   
   validates :name, presence: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }
@@ -12,6 +12,7 @@ class Product < ApplicationRecord
   private
   
   def deduct_from_balance
+    return unless category.present?
     user = category.user
     total = price * amount
     user.update(balance: user.balance - total)
