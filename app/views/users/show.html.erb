@@ -4,7 +4,8 @@
   <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
     <p style="margin: 0 0 10px 0;"><strong>Role:</strong> <%= role_name(@user.role) %></p>
     <p style="margin: 0 0 10px 0;"><strong>Balance:</strong> € <%= number_with_precision(@user.balance, precision: 2) %></p>
-    <p style="margin: 0;"><strong>Income:</strong> € <%= number_with_precision(@user.income, precision: 2) %></p>
+    <p style="margin: 0 0 10px 0;"><strong>Income:</strong> € <%= number_with_precision(@user.income, precision: 2) %></p>
+    <p style="margin: 0;"><strong>Income Day:</strong> <%= number_with_precision(@user.income_day, precision: 0) %></p>
   </div>
 
   <div style="display: flex; gap: 10px;">
