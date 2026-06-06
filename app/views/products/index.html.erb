@@ -7,11 +7,14 @@
     <%= link_to 'Purchase History', purchased_products_path, style: "color: #0066cc; text-decoration: none; margin-left: 15px;" %>
   </div>
   <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px;">
-    <strong>Filter by Category:</strong>
+    <strong>Filter by:</strong>
+    <%= link_to "All", products_path,
+      style: "margin-left: 10px; color: #{params[:category_id].blank? ? '#ff6600' : '#0066cc'}; font-weight: #{params[:category_id].blank? ? 'bold' : 'normal'}; text-decoration: none;" %>
     <% @categories.each do |category| %>
-      <%= link_to category.name, "#category-#{category.id}", style: "margin-left: 10px; color: #0066cc; text-decoration: none;" %>
-    <% end %>
-  </div>
+    <%= link_to category.name, products_path(category_id: category.id),
+        style: "margin-left: 10px; color: #{params[:category_id] == category.id.to_s ? '#ff6600' : '#0066cc'}; font-weight: #{params[:category_id] == category.id.to_s ? 'bold' : 'normal'}; text-decoration: none;" %>
+  <% end %>
+</div>
 
   <% if @products.any? %>
     <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">

@@ -7,6 +7,11 @@ class ProductsController < ApplicationController
     user_category_ids = current_user.categories.pluck(:id)
     @categories = current_user.categories
     @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids)
+    if params[:category_id].present?
+      @selected_category = params[:category_id]
+      @products = @products.where(category_id: params[:category_id])
+    end
+    @products = @products.where.not(status: 'purchased')
   end
 
   def show
