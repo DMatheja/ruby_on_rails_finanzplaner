@@ -36,10 +36,10 @@
     <% end %>
 
     <div style="margin-bottom: 20px;">
-      <%= form.label :income_day, "Income Day (1-31)", style: "display: block, margin-bottom: 8px; font-weight: bold;" %>
-      <%= form.number_field :income_day, in: 1..31, placeholder: "e.g. 25",
+      <%= form.label :income_day, "Income Day (1-28)", style: "display: block, margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.number_field :income_day, in: 1..28, placeholder: "e.g. 25",
       style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
-      <small style="color: #666;">Tag im Monat, an dem dein Gehalt eingeht.</small>
+      <small style="color: #666;">Day of the month, when you get your income.</small>
     </div>
     
     <%= form.submit "Update User", style: "width: 100%; padding: 12px; background: #ffa500; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;" %>

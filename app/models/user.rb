@@ -7,7 +7,7 @@ class User < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :password, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
   validates :income_day,
-  numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 31 }, allow_nil: true
+  numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 28 }, allow_nil: true
 
   # Rate limiting
   MAX_ATTEMPTS = 3
