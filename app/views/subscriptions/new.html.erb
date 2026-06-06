@@ -18,6 +18,17 @@
       <%= form.text_field :name, placeholder: "e.g., Netflix, Spotify", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
     </div>
 
+    <%# Type-Selection %>
+    <div style="margin-bottom: 20px;">
+      <%= form.label :subscription_type, 'Typ', style: "display:block; margin-bottom:8px; font-weight:bold;" %>
+      <%= form.select :subscription_type,
+        { 'Platform subscription (e.g. Netflix)' => 'platform','Regular product (e.g. weekly delivery)' => 'regular' },
+        {},
+        { style: "width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:16px;",
+          id: 'subscription_type_select',
+          onchange: "document.getElementById('quantity_field').style.display = this.value === 'regular' ? 'block' : 'none'" } %>
+    </div>
+
     <div style="margin-bottom: 20px;">
       <%= form.label :price, "Price (€)", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
       <%= form.number_field :price, step: 0.01, placeholder: "e.g., 9.99", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
@@ -28,9 +39,18 @@
       <%= form.select :frequency, { "Weekly" => "weekly", "Monthly" => "monthly" }, {}, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
     </div>
 
+    <%# Amount (visible only on 'regular') %>
+    <div id="quantity_field" style="margin-bottom:20px; display:<%= @subscription.subscription_type == 'regular' ? 'block' : 'none' %>;">
+      <%= form.label :quantity, 'Quantity per billing', style: "display:block; margin-bottom:8px; font-weight:bold;" %>
+      <%= form.number_field :quantity, min: 1, style: "width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:16px;" %>
+    </div>
+ 
+    <%# Billing day %>
     <div style="margin-bottom: 20px;">
-      <%= form.label :start_date, "Start Date", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
-      <%= form.date_field :start_date, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+      <%= form.label :billing_day, 'Billing day (1-31)', style: "display:block; margin-bottom:8px; font-weight:bold;" %>
+      <%= form.number_field :billing_day, in: 1..31, placeholder: 'z.B. 15',
+        style: "width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:16px;" %>
+      <small style="color:#666;"> Billing day of the month.</small>
     </div>
 
     <%= form.submit "Create Subscription", style: "width: 100%; padding: 12px; background: #0066cc; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;" %>
