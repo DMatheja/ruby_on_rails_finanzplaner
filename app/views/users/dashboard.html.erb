@@ -4,6 +4,15 @@
       <h2 style="margin-top: 0; margin-bottom: 15px;">Welcome, <%= @user.name %>!</h2>
       <p style="margin: 0 0 10px 0; font-size: 18px;"><strong>Account Balance:</strong></p>
       <p style="margin: 0; font-size: 32px; color: #0066cc;"><strong>€ <%= number_with_precision(@user.balance, precision: 2) %></strong></p>
+      <% if @user.last_visited_at %>
+        <p style="margin:10px 0 0 0; font-size:13px; color:#999;">
+          Letzter Besuch:
+          <%= @user.last_visited_at.strftime('%d.%m.%Y um %H:%M Uhr') %>
+          <% if @user.last_visited_page %>
+            &middot; Seite: <%= @user.last_visited_page %>
+          <% end %>
+        </p>
+      <% end %>
     </div>
 
     <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
