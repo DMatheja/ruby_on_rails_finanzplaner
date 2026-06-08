@@ -191,5 +191,13 @@
   }
   berechneSparziel();
 </script>
+<% if current_user.admin? %>
+  <div style="margin-top:40px; padding:15px; background:#fce4d6;
+              border-radius:8px;">
+    <strong>🔧 Admin-Bereich:</strong>
+    <%= link_to 'Time-Travel', admin_time_travel_path,
+        style: "color:#833c00; margin-left:10px;" %>
+  </div>
+<% end %>
 
 </div>
