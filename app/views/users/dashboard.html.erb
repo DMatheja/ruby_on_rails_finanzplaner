@@ -122,4 +122,65 @@
     }
   });
   </script>
+
+  <h2>Sparziel-Rechner</h2>
+<div style="background:white; padding:25px; border-radius:12px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:40px;">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+    <div>
+      <label style="display:block; margin-bottom:8px; font-weight:bold;">
+        Zielbetrag (€)
+      </label>
+      <input type="number" id="sg_ziel" min="0" step="100" value="1000"
+             style="width:100%; padding:10px; border:1px solid #ddd;
+                    border-radius:6px; font-size:16px;"
+             oninput="berechneSparziel()">
+    </div>
+    <div>
+      <label style="display:block; margin-bottom:8px; font-weight:bold;">
+        Monatliche Sparrate (€)
+      </label>
+      <input type="number" id="sg_sparrate" min="0" step="50"
+             value="<%= [(@user.income -
+               @monthly_subscriptions - @weekly_subscriptions).to_f,
+               0].max.round %>"
+             style="width:100%; padding:10px; border:1px solid #ddd;
+                    border-radius:6px; font-size:16px;"
+             oninput="berechneSparziel()">
+    </div>
+  </div>
+  <div id="sg_ergebnis" style="margin-top:20px; padding:15px;
+       background:#f0f8ff; border-radius:8px; font-size:18px;">
+  </div>
+</div>
+ 
+<script>
+  function berechneSparziel() {
+    const ziel     = parseFloat(document.getElementById('sg_ziel').value) || 0;
+    const sparrate = parseFloat(document.getElementById('sg_sparrate').value) || 0;
+    const kontostand = <%= @user.balance.to_f %>;
+    const el       = document.getElementById('sg_ergebnis');
+
+    if (ziel < 0) {
+      el.innerHTML = '<span style="color:#e74c3c;">❌ Zielbetrag kann nicht negativ sein.</span>';
+      return;
+    }
+    if (sparrate <= 0) {
+      el.innerHTML = '<span style="color:#e74c3c;">❌ Bitte eine positive Sparrate eingeben.</span>';
+      return;
+    }
+    const fehlend = Math.max(0, ziel - kontostand);
+    if (fehlend === 0) {
+      el.innerHTML = '✅ Ziel bereits erreicht! Aktueller Kontostand: €' +
+        kontostand.toFixed(2);
+      return;
+    }
+    const monate = Math.ceil(fehlend / sparrate);
+    const datum  = new Date();
+    datum.setMonth(datum.getMonth() + monate);
+    el.innerHTML = `🎯 <strong>€${ziel.toFixed(2)}</strong> erreicht in <strong>${monate} Monat${monate === 1 ? '' : 'en'}</strong> (ca. ${datum.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })}). Noch fehlend: <strong>€${fehlend.toFixed(2)}</strong>`;
+  }
+  berechneSparziel();
+</script>
+
 </div>
