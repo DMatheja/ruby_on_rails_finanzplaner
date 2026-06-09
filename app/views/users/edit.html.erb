@@ -19,6 +19,12 @@
     </div>
 
     <div style="margin-bottom: 20px;">
+      <%= form.label :password, "Password (leave blank to keep current)", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.password_field :password, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+    
       <%= form.label :balance, style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
       <%= form.number_field :balance, step: 0.01, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
     </div>

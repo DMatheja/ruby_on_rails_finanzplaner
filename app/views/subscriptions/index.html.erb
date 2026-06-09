@@ -12,7 +12,6 @@
           <th style="padding: 12px; text-align: right;">Price</th>
           <th style="padding: 12px; text-align: center;">Frequency</th>
           <th style="padding: 12px; text-align: left;">Start Date</th>
-          <th style="padding: 12px; text-align: center;">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -22,11 +21,6 @@
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(subscription.price, precision: 2) %></td>
             <td style="padding: 12px; text-align: center;"><%= subscription.frequency.titleize %></td>
             <td style="padding: 12px;"><%= subscription.start_date.strftime("%d.%m.%Y") %></td>
-            <td style="padding: 12px; text-align: center;">
-              <%= link_to "View", subscription_path(subscription), style: "color: #0066cc; text-decoration: none; margin-right: 10px;" %>
-              <%= link_to "Edit", edit_subscription_path(subscription), style: "color: #ffa500; text-decoration: none; margin-right: 10px;" %>
-              <%= link_to "Delete", subscription_path(subscription), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none;" %>
-            </td>
           </tr>
         <% end %>
       </tbody>
