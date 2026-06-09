@@ -7,6 +7,11 @@ Rails.application.routes.draw do
     post :attack, on: :collection
   end
   get 'logout', to: 'sessions#destroy'
+
+  namespace :admin do
+  resource :time_travel, only: [:show, :update, :destroy]
+  end
+
   
   resources :users
   resources :categories

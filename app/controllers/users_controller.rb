@@ -6,6 +6,19 @@ class UsersController < ApplicationController
   def dashboard
     @user = current_user
     @categories = @user.categories.includes(:products)
+
+    # Daten für Kategorie-Ausgaben-Chart
+    @chart_labels = @categories.map(&:name).to_json
+    @chart_spent  = @categories.map(&:spent_amount).to_json
+    @chart_limits = @categories.map { |c| c.limit || 0 }.to_json
+ 
+    # Monatliche Subscription-Kosten
+    @monthly_subscriptions = @user.subscriptions
+      .where(frequency: 'monthly')
+      .sum(:price)
+    @weekly_subscriptions = @user.subscriptions
+      .where(frequency: 'weekly')
+      .sum(:price) * 4
   end
 
   def index
