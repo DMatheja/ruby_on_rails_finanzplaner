@@ -9,6 +9,8 @@ class User < ApplicationRecord
   validates :income_day,
   numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 28 }, allow_nil: true
 
+  before_create :set_default_last_processed_date
+
   # Rate limiting
   MAX_ATTEMPTS = 3
   LOCKOUT_DURATION = 15.minutes
@@ -39,5 +41,10 @@ class User < ApplicationRecord
   
   def reset_attempts
     update(failed_attempts: 0, locked_until: nil)
+  end
+  private
+
+  def set_default_last_processed_date
+    self.last_processed_date ||= Date.current
   end
 end

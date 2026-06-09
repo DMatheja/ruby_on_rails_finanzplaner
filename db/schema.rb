@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_06_133510) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_09_155550) do
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.decimal "limit", precision: 10, scale: 2
@@ -51,6 +51,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_06_133510) do
     t.integer "failed_attempts", default: 0
     t.decimal "income", precision: 10, scale: 2, default: "2000.0"
     t.integer "income_day", default: 1
+    t.date "last_processed_date"
     t.datetime "last_visited_at"
     t.string "last_visited_page"
     t.datetime "locked_until"

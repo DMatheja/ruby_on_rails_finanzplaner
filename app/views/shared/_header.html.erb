@@ -15,7 +15,7 @@
       
       <div style="display: flex; align-items: center; gap: 15px; padding-left: 20px; border-left: 1px solid #666;">
         <span><strong><%= current_user.name %></strong> (<%= role_name(current_user.role) %>)</span>
-        <%= link_to "Logout", logout_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, style: "color: #ff6b6b; text-decoration: none;" %>
+        <%= link_to "Logout", logout_path, style: "color: #ff6b6b; text-decoration: none;" %>
       </div>
     <% end %>
   </nav>
