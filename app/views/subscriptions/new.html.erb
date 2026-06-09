@@ -12,7 +12,7 @@
     </div>
   <% end %>
 
-  <%= form_with(model: @subscription, local: true) do |form| %>
+  <%= form_with(model: @subscription, local: true, data: { turbo: false }) do |form| %>
     <div style="margin-bottom: 20px;">
       <%= form.label :name, "Subscription Name", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
       <%= form.text_field :name, placeholder: "e.g., Netflix, Spotify", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
@@ -32,6 +32,11 @@
     <div style="margin-bottom: 20px;">
       <%= form.label :price, "Price (€)", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
       <%= form.number_field :price, step: 0.01, placeholder: "e.g., 9.99", style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= form.label :start_date, "Start Date", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
+      <%= form.date_field :start_date, value: @subscription.start_date || Date.current, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
     </div>
 
     <div style="margin-bottom: 20px;">
