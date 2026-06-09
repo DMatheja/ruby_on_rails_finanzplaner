@@ -14,7 +14,11 @@
     <% end %>
     
     <% if current_user.admin? %>
-      <%= link_to "Delete", user_path(@user), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger", style: "background: #ff0000; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; cursor: pointer;" %>
+      <%= button_to "Delete", user_path(@user), 
+          method: :delete, 
+          form: { data: { turbo_confirm: "Are you sure?" } }, 
+          class: "btn btn-danger", 
+          style: "background: #ff0000; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;" %>
     <% end %>
     
     <%= link_to "Back", users_path, class: "btn btn-secondary", style: "background: #666; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; cursor: pointer;" %>

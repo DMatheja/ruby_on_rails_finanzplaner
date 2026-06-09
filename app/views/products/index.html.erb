@@ -25,7 +25,6 @@
           <th style="padding: 12px; text-align: right;">Price</th>
           <th style="padding: 12px; text-align: center;">Qty</th>
           <th style="padding: 12px; text-align: right;">Total</th>
-          <th style="padding: 12px; text-align: center;">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -36,17 +35,6 @@
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price, precision: 2) %></td>
             <td style="padding: 12px; text-align: center;"><%= product.amount %></td>
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price * product.amount, precision: 2) %></td>
-            <td style="padding: 12px; text-align: center;">
-              <%= link_to "View", product_path(product),
-                style: "color: #0066cc; text-decoration: none; margin-right: 8px;" %>
-              <%= link_to "Edit", edit_product_path(product),
-                style: "color: #ffa500; text-decoration: none; margin-right: 8px;" %>
-              <%= button_to "✓ Bought", mark_purchased_product_path(product), method: :patch,
-                style: "background: #28a745; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-right: 8px;" %>
-              <%= button_to "Delete", product_path(product), method: :delete,
-                form: { data: { turbo_confirm: "Delete?" } },
-                style: "background: none; border: none; color: #ff0000; cursor: pointer; padding: 0; font-size: inherit;" %>
-            </td>
           </tr>
         <% end %>
       </tbody>
