@@ -20,7 +20,7 @@ class SubscriptionsController < ApplicationController
     if @subscription.save
       redirect_to @subscription, notice: 'Subscription was successfully created.'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -33,7 +33,7 @@ class SubscriptionsController < ApplicationController
     if @subscription.update(subscription_params)
       redirect_to @subscription, notice: 'Subscription was successfully updated.'
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

@@ -25,7 +25,7 @@
             <td style="padding: 12px; text-align: center;">
               <%= link_to "View", subscription_path(subscription), style: "color: #0066cc; text-decoration: none; margin-right: 10px;" %>
               <%= link_to "Edit", edit_subscription_path(subscription), style: "color: #ffa500; text-decoration: none; margin-right: 10px;" %>
-              <%= link_to "Delete", subscription_path(subscription), method: :delete, data: { confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none;" %>
+              <%= link_to "Delete", subscription_path(subscription), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none;" %>
             </td>
           </tr>
         <% end %>
