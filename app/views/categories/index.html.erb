@@ -25,7 +25,7 @@
           <div style="display: flex; gap: 10px; margin-top: 15px;">
             <%= link_to "View", category_path(category), style: "color: #0066cc; text-decoration: none; font-size: 14px;" %>
             <%= link_to "Edit", edit_category_path(category), style: "color: #ffa500; text-decoration: none; font-size: 14px; margin-left: 10px;" %>
-            <%= link_to "Delete", category_path(category), method: :delete, data: { confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none; font-size: 14px; margin-left: 10px;" %>
+            <%= link_to "Delete", category_path(category), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none; font-size: 14px; margin-left: 10px;" %>
           </div>
         </div>
       <% end %>

@@ -49,7 +49,7 @@
 
   <div style="display: flex; gap: 10px;">
     <%= link_to "Edit", edit_category_path(@category), style: "background: #ffa500; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
-    <%= link_to "Delete", category_path(@category), method: :delete, data: { confirm: "Are you sure?" }, style: "background: #ff0000; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
+    <%= link_to "Delete", category_path(@category), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, style: "background: #ff0000; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
     <%= link_to "Back", categories_path, style: "background: #666; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
   </div>
 </div>
