@@ -9,6 +9,10 @@ class CategoriesController < ApplicationController
 
   def show
     authorize_category_access
+    @purchased_products = @category.products.where(status: 'purchased')
+    @total_sum = @category.total_amount
+    @spent_sum = @category.spent_amount
+    @limit = @category.limit || 0
   end
 
   def new

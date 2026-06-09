@@ -1,7 +1,7 @@
 <div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
   <div style="display: flex; justify-content: space-between;
               align-items: center; margin-bottom: 30px;">
-    <h2>Kaufhistorie</h2>
+    <h2>Purchas History</h2>
     <%= link_to 'Back to the products', products_path,
         style: "color: #0066cc; text-decoration: none;" %>
   </div>
@@ -34,7 +34,7 @@
               € <%= number_with_precision(product.price * product.amount, precision: 2) %>
             </td>
             <td style="padding:12px; text-align:center;">
-              <%= button_to 'Re-Add', rebuy_product_path(product),
+              <%= button_to 'Undo', rebuy_product_path(product),
                   method: :patch,
                   style: "background:#0066cc; color:white; border:none;
                           padding:6px 14px; border-radius:4px; cursor:pointer;" %>

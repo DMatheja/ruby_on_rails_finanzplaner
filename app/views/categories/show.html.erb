@@ -1,29 +1,16 @@
 <div style="max-width: 800px; margin: 40px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
   <h2 style="margin-top: 0;"><%= @category.name %></h2>
 
-  <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-    <% spent = @category.spent_amount %>
-    <% limit = @category.limit || 0 %>
-    <% remaining = limit - spent %>
-    
-    <p style="margin: 0 0 10px 0;"><strong>Budget Limit:</strong> € <%= number_with_precision(limit, precision: 2) %></p>
-    <p style="margin: 0 0 10px 0;"><strong>Already Spent:</strong> € <%= number_with_precision(spent, precision: 2) %></p>
-    <p style="margin: 0;"><strong>Remaining:</strong> € <%= number_with_precision([remaining, 0].max, precision: 2) %> 
-      <% if remaining < 0 %>
-        <span style="color: #ff0000;">(OVER BUDGET by € <%= number_with_precision(remaining.abs, precision: 2) %>)</span>
-      <% end %>
-    </p>
-  </div>
-
+  <%# ─── TABELLE 1: Alle Produkte ─────────────────────────────────── %>
   <div style="margin-bottom: 30px;">
-    <h3>Products</h3>
+    <h3>Alle Produkte</h3>
     <% if @category.products.any? %>
       <table style="width: 100%; border-collapse: collapse; background: #fafafa;">
         <thead>
           <tr style="background: #f0f0f0; border-bottom: 1px solid #ddd;">
             <th style="padding: 10px; text-align: left;">Name</th>
-            <th style="padding: 10px; text-align: right;">Price</th>
-            <th style="padding: 10px; text-align: center;">Amount</th>
+            <th style="padding: 10px; text-align: right;">Preis</th>
+            <th style="padding: 10px; text-align: center;">Menge</th>
             <th style="padding: 10px; text-align: center;">Status</th>
           </tr>
         </thead>
@@ -34,7 +21,7 @@
               <td style="padding: 10px; text-align: right;">€ <%= number_with_precision(product.price, precision: 2) %></td>
               <td style="padding: 10px; text-align: center;"><%= product.amount %></td>
               <td style="padding: 10px; text-align: center;">
-                <span style="background: <% if product.status == 'purchased' %>#d4edda<% else %>#fff3cd<% end %>; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                <span style="background: <%= product.status == 'purchased' ? '#d4edda' : '#fff3cd' %>; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
                   <%= product.status.titleize %>
                 </span>
               </td>
@@ -42,11 +29,98 @@
           <% end %>
         </tbody>
       </table>
+
+      <%# Gesamtsumme aller Produkte %>
+      <p style="text-align: right; margin-top: 8px;">
+        <strong>Gesamtsumme:</strong>
+        <% if @limit > 0 && @total_sum > @limit %>
+          <span style="color: #ff0000;">
+            € <%= number_with_precision(@total_sum, precision: 2) %>
+            (Limit überschritten um € <%= number_with_precision(@total_sum - @limit, precision: 2) %>)
+          </span>
+        <% else %>
+          € <%= number_with_precision(@total_sum, precision: 2) %>
+        <% end %>
+      </p>
     <% else %>
-      <p style="color: #999;">No products in this category.</p>
+      <p style="color: #999;">Keine Produkte in dieser Kategorie.</p>
     <% end %>
   </div>
 
+  <%# ─── TABELLE 2: Nur gekaufte Produkte ─────────────────────────── %>
+  <div style="margin-bottom: 30px;">
+    <h3>Gekaufte Produkte</h3>
+    <% if @purchased_products.any? %>
+      <table style="width: 100%; border-collapse: collapse; background: #fafafa;">
+        <thead>
+          <tr style="background: #d4edda; border-bottom: 1px solid #ddd;">
+            <th style="padding: 10px; text-align: left;">Name</th>
+            <th style="padding: 10px; text-align: right;">Preis</th>
+            <th style="padding: 10px; text-align: center;">Menge</th>
+            <th style="padding: 10px; text-align: right;">Gesamt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @purchased_products.each do |product| %>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 10px;"><%= link_to product.name, product_path(product), style: "color: #0066cc; text-decoration: none;" %></td>
+              <td style="padding: 10px; text-align: right;">€ <%= number_with_precision(product.price, precision: 2) %></td>
+              <td style="padding: 10px; text-align: center;"><%= product.amount %></td>
+              <td style="padding: 10px; text-align: right;">€ <%= number_with_precision(product.price * product.amount, precision: 2) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <%# Summe der ausgegebenen (gekauften) Kosten %>
+      <p style="text-align: right; margin-top: 8px;">
+        <strong>Ausgegeben:</strong>
+        <% if @limit > 0 && @spent_sum > @limit %>
+          <span style="color: #ff0000;">
+            € <%= number_with_precision(@spent_sum, precision: 2) %>
+            (Limit überschritten um € <%= number_with_precision(@spent_sum - @limit, precision: 2) %>)
+          </span>
+        <% else %>
+          € <%= number_with_precision(@spent_sum, precision: 2) %>
+        <% end %>
+      </p>
+    <% else %>
+      <p style="color: #999;">Noch keine Produkte als gekauft markiert.</p>
+    <% end %>
+  </div>
+
+  <%# ─── FORTSCHRITTSLEISTEN ───────────────────────────────────────── %>
+  <% if @limit > 0 %>
+    <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+      <p style="margin: 0 0 4px 0;"><strong>Budget-Limit:</strong> € <%= number_with_precision(@limit, precision: 2) %></p>
+
+      <%# Leiste 1: Gesamtsumme (alle Produkte) vs. Limit %>
+      <% total_pct = [(@total_sum / @limit.to_f * 100).round(1), 100].min %>
+      <p style="margin: 12px 0 4px 0; font-size: 14px;">
+        Gesamtsumme (alle Produkte): <%= total_pct %>%
+        <% if @total_sum > @limit %>
+          <span style="color: #ff0000; font-weight: bold;"> – Limit überschritten!</span>
+        <% end %>
+      </p>
+      <div style="background: #e0e0e0; border-radius: 6px; height: 18px; overflow: hidden;">
+        <div style="width: <%= total_pct %>%; height: 100%; background: <%= @total_sum > @limit ? '#ff4444' : '#ffa500' %>; border-radius: 6px; transition: width 0.3s;"></div>
+      </div>
+
+      <%# Leiste 2: Ausgegebene Summe (nur gekaufte) vs. Limit %>
+      <% spent_pct = [(@spent_sum / @limit.to_f * 100).round(1), 100].min %>
+      <p style="margin: 12px 0 4px 0; font-size: 14px;">
+        Ausgegeben (nur gekaufte): <%= spent_pct %>%
+        <% if @spent_sum > @limit %>
+          <span style="color: #ff0000; font-weight: bold;"> – Limit überschritten!</span>
+        <% end %>
+      </p>
+      <div style="background: #e0e0e0; border-radius: 6px; height: 18px; overflow: hidden;">
+        <div style="width: <%= spent_pct %>%; height: 100%; background: <%= @spent_sum > @limit ? '#ff4444' : '#28a745' %>; border-radius: 6px; transition: width 0.3s;"></div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# ─── BUTTONS ───────────────────────────────────────────────────── %>
   <div style="display: flex; gap: 10px;">
     <%= link_to "Edit", edit_category_path(@category), style: "background: #ffa500; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
     <%= link_to "Delete", category_path(@category), method: :delete, data: { confirm: "Are you sure?" }, style: "background: #ff0000; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;" %>
