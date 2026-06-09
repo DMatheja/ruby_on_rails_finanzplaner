@@ -73,7 +73,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   test "subscription delete links use Turbo-compatible delete behavior" do
     subscription = @user.subscriptions.create!(name: "Spotify", price: 4.99, frequency: "monthly", start_date: Date.current, billing_day: 1, subscription_type: "platform", quantity: 1)
 
-    get subscriptions_path
+    get subscription_path(subscription)
     assert_response :success
     assert_select "a[href='#{subscription_path(subscription)}'][data-turbo-method='delete']", text: "Delete"
   end
