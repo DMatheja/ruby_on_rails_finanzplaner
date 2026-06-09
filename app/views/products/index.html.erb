@@ -44,7 +44,7 @@
               <%= button_to "✓ Bought", mark_purchased_product_path(product), method: :patch,
                 style: "background: #28a745; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-right: 8px;" %>
               <%= button_to "Delete", product_path(product), method: :delete,
-                data: { confirm: "Delete?" },
+                form: { data: { turbo_confirm: "Delete?" } },
                 style: "background: none; border: none; color: #ff0000; cursor: pointer; padding: 0; font-size: inherit;" %>
             </td>
           </tr>
