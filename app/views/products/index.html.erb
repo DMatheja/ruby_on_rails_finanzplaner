@@ -37,7 +37,7 @@
             <td style="padding: 12px; text-align: center;"><%= product.amount %></td>
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price * product.amount, precision: 2) %></td>
             <td style="padding: 12px; text-align: center;">
-              <%= button_to "✓ Bought", mark_purchased_product_path(product), method: :patch,
+              <%= button_to "✓ Buy", mark_purchased_product_path(product), method: :patch,
                 style: "background: #28a745; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-right: 8px;" %>
             </td>
           </tr>
