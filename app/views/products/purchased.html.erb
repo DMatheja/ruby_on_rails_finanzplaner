@@ -16,7 +16,8 @@
           <th style="padding:12px; text-align:right;">Price</th>
           <th style="padding:12px; text-align:center;">Amount</th>
           <th style="padding:12px; text-align:right;">Total</th>
-          <th style="padding:12px; text-align:center;">Action</th>
+          <th style="padding:12px; text-align:right;"></th>
+          <th style="padding:12px; text-align:right;"></th>
         </tr>
       </thead>
       <tbody>
@@ -40,8 +41,9 @@
                 style: "background:#0066cc; color:white; border:none;
                   padding:6px 14px; border-radius:4px; cursor:pointer;
                   margin-right:6px;" %>
-
-              <%# Re-Add: erstellt eine neue Kopie des Produkts %>
+            </td>
+            <td style="padding:12px; text-align:center;">
+            <%# Re-Add: erstellt eine neue Kopie des Produkts %>
               <%= button_to 'Re-Add', readd_product_path(product),
                 method: :post,
                 style: "background:#28a745; color:white; border:none;
