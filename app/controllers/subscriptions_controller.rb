@@ -34,6 +34,7 @@ class SubscriptionsController < ApplicationController
       redirect_to @subscription, notice: 'Subscription was successfully updated.'
     else
       render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
