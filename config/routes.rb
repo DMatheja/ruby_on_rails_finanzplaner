@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     member do
       patch :rebuy
       patch :mark_purchased
+      post :readd
     end
   end
   resources :subscriptions
