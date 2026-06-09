@@ -14,7 +14,12 @@ Rails.application.routes.draw do
 
   
   resources :users
-  resources :categories
+  resources :categories do
+    member do
+      patch :mark_all_purchased
+      patch :mark_product_purchased
+    end
+  end
   resources :products do
     collection do
       get :purchased
@@ -22,6 +27,7 @@ Rails.application.routes.draw do
     member do
       patch :rebuy
       patch :mark_purchased
+      post :readd
     end
   end
   resources :subscriptions

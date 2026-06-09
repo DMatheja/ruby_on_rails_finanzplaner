@@ -11,22 +11,38 @@
           <h3 style="margin-top: 0;"><%= link_to category.name, category_path(category), style: "color: #0066cc; text-decoration: none;" %></h3>
           
           <% spent = category.spent_amount %>
-          <% limit = category.limit || 0 %>
-          <% percentage = limit > 0 ? (spent / limit * 100).round(0) : 0 %>
-          
-          <div style="margin-bottom: 15px;">
-            <p style="margin: 0 0 5px 0;"><strong>Budget:</strong> € <%= number_with_precision(limit, precision: 2) %></p>
-            <div style="background: #f0f0f0; border-radius: 4px; height: 20px; overflow: hidden;">
-              <div style="background: <% if percentage > 80 %>#ff6b6b<% elsif percentage > 50 %>#ffa500<% else %>#4caf50<% end %>; width: <%= percentage %>%; height: 100%;"></div>
-            </div>
-            <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">€ <%= number_with_precision(spent, precision: 2) %> / <%= percentage %>%</p>
-          </div>
+<% total = category.total_amount %>
+<% limit = category.limit || 0 %>
 
-          <div style="display: flex; gap: 10px; margin-top: 15px;">
-            <%= link_to "View", category_path(category), style: "color: #0066cc; text-decoration: none; font-size: 14px;" %>
-            <%= link_to "Edit", edit_category_path(category), style: "color: #ffa500; text-decoration: none; font-size: 14px; margin-left: 10px;" %>
-            <%= link_to "Delete", category_path(category), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, style: "color: #ff0000; text-decoration: none; font-size: 14px; margin-left: 10px;" %>
-          </div>
+<div style="margin-bottom: 15px;">
+  <p style="margin: 0 0 8px 0;"><strong>Limit:</strong> € <%= number_with_precision(limit, precision: 2) %></p>
+
+  <% if limit > 0 %>
+    <% total_pct = [(total / limit.to_f * 100).round(1), 100].min %>
+    <p style="margin: 0 0 3px 0; font-size: 12px; color: #555;">
+      Total: € <%= number_with_precision(total, precision: 2) %> (<%= total_pct %>%)
+      <% if total > limit %>
+        <span style="color: #ff0000; font-weight: bold;">+€ <%= number_with_precision(total - limit, precision: 2) %></span>
+      <% end %>
+    </p>
+    <div style="background: #e0e0e0; border-radius: 4px; height: 10px; overflow: hidden; margin-bottom: 8px;">
+      <div style="width: <%= total_pct %>%; height: 100%; background: <%= total > limit ? '#ff4444' : '#ffa500' %>; border-radius: 4px;"></div>
+    </div>
+
+    <% spent_pct = [(spent / limit.to_f * 100).round(1), 100].min %>
+    <p style="margin: 0 0 3px 0; font-size: 12px; color: #555;">
+      Spent: € <%= number_with_precision(spent, precision: 2) %> (<%= spent_pct %>%)
+      <% if spent > limit %>
+        <span style="color: #ff0000; font-weight: bold;">+€ <%= number_with_precision(spent - limit, precision: 2) %></span>
+      <% end %>
+    </p>
+    <div style="background: #e0e0e0; border-radius: 4px; height: 10px; overflow: hidden;">
+      <div style="width: <%= spent_pct %>%; height: 100%; background: <%= spent > limit ? '#ff4444' : '#28a745' %>; border-radius: 4px;"></div>
+    </div>
+  <% else %>
+    <p style="font-size: 12px; color: #999;">No limit set.</p>
+  <% end %>
+</div>
         </div>
       <% end %>
     </div>

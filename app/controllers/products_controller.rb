@@ -69,6 +69,18 @@ class ProductsController < ApplicationController
     redirect_to purchased_products_path, notice: "↩ '#{@product.name}' was added to the shopping list."
   end
 
+  def readd
+    original = Product.find(params[:id])
+    authorize_product_access_for(original)
+
+    new_product = original.dup
+    new_product.status = 'pending'
+    new_product.save!
+
+    redirect_to purchased_products_path, notice: "✚ '#{original.name}' was re-added as a new product."
+
+  end
+
   def mark_purchased
     @product = Product.find(params[:id])
     authorize_product_access
@@ -87,6 +99,15 @@ class ProductsController < ApplicationController
       redirect_to root_path, alert: 'You do not have permission to create products.'
     end
   end
+
+  def authorize_product_access_for(product)
+    unless current_user.admin? ||
+      (current_user.user? && product.category&.user_id == current_user.id) ||
+      (current_user.user? && product.category_id.nil?)
+      redirect_to root_path, alert: 'You do not have permission to access this product.'
+      end
+    end
+
 
   def authorize_product_access
     unless current_user.admin? ||

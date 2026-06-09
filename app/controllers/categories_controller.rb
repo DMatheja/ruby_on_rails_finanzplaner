@@ -1,6 +1,6 @@
 # app/controllers/categories_controller.rb
 class CategoriesController < ApplicationController
-  before_action :set_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_category, only: [:show, :edit, :update, :destroy, :mark_product_purchased, :mark_all_purchased]
   before_action :authorize_access, only: [:edit, :update, :destroy, :new, :create]
 
   def index
@@ -9,6 +9,10 @@ class CategoriesController < ApplicationController
 
   def show
     authorize_category_access
+    @purchased_products = @category.products.where(status: 'purchased')
+    @total_sum = @category.total_amount
+    @spent_sum = @category.spent_amount
+    @limit = @category.limit || 0
   end
 
   def new
@@ -43,6 +47,17 @@ class CategoriesController < ApplicationController
     authorize_category_access
     @category.destroy
     redirect_to categories_url, notice: 'Category was successfully deleted.'
+  end
+
+  def mark_product_purchased
+    @product = @category.products.find(params[:product_id])
+    @product.update(status: 'purchased')
+    redirect_to @category, notice: "✓ Bought '#{@product.name}'."
+  end
+
+  def mark_all_purchased
+    @category.products.where.not(status: 'purchased').update_all(status: 'purchased')
+    redirect_to @category, notice: "✓ Bought all products."
   end
 
   private
