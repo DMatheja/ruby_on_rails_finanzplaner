@@ -45,6 +45,6 @@ class User < ApplicationRecord
   private
 
   def set_default_last_processed_date
-    self.last_processed_date ||= Date.current
+    self.last_processed_date ||= Date.current - 1.day
   end
 end

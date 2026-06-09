@@ -7,11 +7,22 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   
+  around_action :handle_time_travel
   before_action :require_login
   before_action :process_finances
   before_action :track_last_visit
 
   private
+
+  def handle_time_travel
+    if session[:simulated_time].present?
+      Timecop.travel(Time.parse(session[:simulated_time])) do
+        yield
+      end
+    else
+      yield
+    end
+  end
 
   def current_user
     @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
