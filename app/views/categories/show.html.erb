@@ -25,6 +25,10 @@
       <%= button_to "✓ Buy", mark_product_purchased_category_path(@category, product_id: product.id),
           method: :patch,
           style: "background: #28a745; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;" %>
+      <%= button_to "✕ Remove", remove_product_category_path(@category, product_id: product.id),
+      method: :patch,
+      data: { confirm: "Remove the product from this category?" },
+      style: "background: #dc3545; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 6px;" %>
     </td>
   </tr>
 <% end %>
