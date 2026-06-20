@@ -193,7 +193,6 @@ bin/rubocop
 | max       | User   | 123456    |
 | admin     | Admin  | password  |
 | viewer    | Viewer | 123456789 |
-| testadmin | admin  | qwerty    |
 
 > Die Testnutzer werden beim ersten Start automatisch über `db/seeds.rb` angelegt.
 
