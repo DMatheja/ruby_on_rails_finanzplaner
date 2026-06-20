@@ -3,7 +3,7 @@ require "test_helper"
 class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create!(name: "subtester", password: "password123", password_confirmation: "password123", role: 1, balance: 1000.0, income: 2000.0, income_day: 1)
-    post sessions_path, params: { user_id: @user.id, password: "password123" }
+    post sessions_path, params: { user_name: @user.name, password: "password123" }
   end
 
   test "invalid subscription creation returns validation errors" do

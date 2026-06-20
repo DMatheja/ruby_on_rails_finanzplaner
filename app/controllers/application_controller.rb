@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   helper_method :current_user
-  
+
   around_action :handle_time_travel
   before_action :require_login
   before_action :process_finances
@@ -41,12 +41,12 @@ class ApplicationController < ActionController::Base
   def track_last_visit
     return unless current_user
     page_name = case request.path
-                when root_path          then 'Dashboard'
-                when products_path      then 'Products'
-                when categories_path    then 'Categories'
-                when subscriptions_path then 'Subscriptions'
-                else request.path
-                end
+    when root_path          then "Dashboard"
+    when products_path      then "Products"
+    when categories_path    then "Categories"
+    when subscriptions_path then "Subscriptions"
+    else request.path
+    end
     current_user.update_columns(
       last_visited_at:   Time.current,
       last_visited_page: page_name

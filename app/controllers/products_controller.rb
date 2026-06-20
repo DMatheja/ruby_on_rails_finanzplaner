@@ -97,7 +97,7 @@ class ProductsController < ApplicationController
   def mark_purchased
     @product = Product.find(params[:id])
     authorize_product_access
-    @product.update(status: 'purchased')
+    @product.update(status: "purchased")
     redirect_to products_path, notice: "✓ '#{@product.name}' was marked as purchased."
   end
 
@@ -119,7 +119,7 @@ class ProductsController < ApplicationController
       (current_user.user? && product.category_id.nil?)
       redirect_to root_path, alert: "You do not have permission to access this product."
     end
-    end
+  end
 
 
   def authorize_product_access

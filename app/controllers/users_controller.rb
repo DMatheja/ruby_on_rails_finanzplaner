@@ -1,7 +1,7 @@
 # app/controllers/users_controller.rb
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_access, only: [:edit, :update, :destroy, :index]
+  before_action :set_user, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_access, only: [ :edit, :update, :destroy, :index ]
 
   def dashboard
     @user = current_user
@@ -11,13 +11,13 @@ class UsersController < ApplicationController
     @chart_labels = @categories.map(&:name).to_json
     @chart_spent  = @categories.map(&:spent_amount).to_json
     @chart_limits = @categories.map { |c| c.limit || 0 }.to_json
- 
+
     # Monatliche Subscription-Kosten
     @monthly_subscriptions = @user.subscriptions
-      .where(frequency: 'monthly')
+      .where(frequency: "monthly")
       .sum(:price)
     @weekly_subscriptions = @user.subscriptions
-      .where(frequency: 'weekly')
+      .where(frequency: "weekly")
       .sum(:price) * 4
   end
 
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      redirect_to @user, notice: 'User was successfully created.'
+      redirect_to @user, notice: "User was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
   def update
     authorize_user_access
     if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+      redirect_to @user, notice: "User was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -58,7 +58,7 @@ class UsersController < ApplicationController
   def destroy
     authorize_user_access
     @user.destroy
-    redirect_to users_url, notice: 'User was successfully deleted.'
+    redirect_to users_url, notice: "User was successfully deleted."
   end
 
   private
@@ -69,13 +69,13 @@ class UsersController < ApplicationController
 
   def authorize_access
     unless current_user.admin?
-      redirect_to root_path, alert: 'You do not have permission to perform this action.'
+      redirect_to root_path, alert: "You do not have permission to perform this action."
     end
   end
 
   def authorize_user_access
     unless current_user.admin? || current_user.id == @user.id
-      redirect_to root_path, alert: 'You can only edit your own profile.'
+      redirect_to root_path, alert: "You can only edit your own profile."
     end
   end
 

@@ -12,7 +12,7 @@ module SecurityDictionary
     "network", "packet", "socket", "protocol",
     "routing", "gateway", "proxy", "tunnel"
   ].freeze
-  
+
   # 4th word (index 3): "dictionary"
   # 5th word (index 4): "security"
   # Erika's password is complex and not in dictionary
