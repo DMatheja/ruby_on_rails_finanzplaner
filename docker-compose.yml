@@ -7,6 +7,9 @@ services:
     volumes:
       - finanzplaner_storage:/rails/storage
     restart: unless-stopped
+    environment:
+      RAILS_ENV: development
+      SECRET_KEY_BASE: dummy_secret_base
 
 volumes:
   finanzplaner_storage:
