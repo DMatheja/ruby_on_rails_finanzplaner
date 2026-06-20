@@ -18,19 +18,24 @@ Der Finanzplaner ist eine webbasierte Anwendung zur persönlichen Finanzverwaltu
 - [x] Header-Navigation
 - [x] Nutzer: Auswahl, Bearbeiten, Anlegen, Löschen (rollenbasiert)
 - [x] Kategorien mit Limits & Summenanzeige: Seite, Bearbeiten, Anlegen, Löschen
-- [x] Produkte: Seite, Bearbeiten, Anlegen, Löschen (nur kategorielose Produkte in der Hauptliste)
+- [x] Produkte: Seite, Bearbeiten, Anlegen, Löschen
+- [x] Filteroptionen für die Produktliste (nach Kategorie)
 - [x] Subscriptions mit Abrechnungsdatum: Seite, Bearbeiten, Anlegen, Löschen
 - [x] Produkte als gekauft markieren + Ausgabenliste
 - [x] Kontostand und Einkommen eines Nutzers mit Einkommensdatum
 - [x] Sparziel-Rechner
 - [x] Home Page mit Nutzername, Kontostand, Sparzielrechner und zuletzt aufgerufen
 - [x] Grafische Übersicht des Kontostandes (Einkommen, Ausgaben pro Monat)
+- [x] Zeitsimulation für Administratoren
+- [x] verschiedene Berechtigungen für verschiedene Rollen (Viewer, User, Admin)
 
 ### Optionale Funktionen
 
 - [ ] Gruppen von Usern erstellen mit Limit und Summe
 
 ### Nicht umgesetzt / bewusst ausgelassen
+
+- [ ] Gruppen von Usern erstellen mit Limit und Summe
 
 ---
 
@@ -39,7 +44,7 @@ Der Finanzplaner ist eine webbasierte Anwendung zur persönlichen Finanzverwaltu
 - **Frontend:** ERB-Templates (Embedded Ruby), Stimulus.js, Turbo (Hotwire), Importmap
 - **Backend:** Ruby on Rails 8.1, Puma Web Server
 - **Datenbank / Speicherung:** SQLite 3
-- **Framework(s):** Ruby on Rails 8.1 (MVC-Architektur)
+- **Framework(s):** Ruby on Rails 8.1
 - **Weitere Bibliotheken / Tools:**
   - `bcrypt` – Passwort-Hashing (`has_secure_password`)
   - `solid_cache`, `solid_queue`, `solid_cable` – datenbankbasiertes Caching, Jobs & WebSockets
@@ -48,6 +53,7 @@ Der Finanzplaner ist eine webbasierte Anwendung zur persönlichen Finanzverwaltu
   - `rubocop-rails-omakase` – Code-Style-Linting
   - `propshaft` – Asset-Pipeline
   - `thruster` – HTTP-Caching/Komprimierung vor Puma
+  - `timecop` – für Zeitsimulation
   - Docker – Containerisierung
 
 ---
@@ -188,11 +194,12 @@ bin/rubocop
 
 ## Users
 
-| Name      | Rolle  | Passwort  |
-| --------- | ------ | --------- |
-| max       | User   | 123456    |
-| admin     | Admin  | password  |
-| viewer    | Viewer | 123456789 |
+| Name   | Rolle  | Passwort  | Berechtigungen                                          |
+| ------ | ------ | --------- | ------------------------------------------------------- |
+| max    | User   | 123456    | Read, Write, Delete (Produkte, Kategorien, Abonnements) |
+| admin  | Admin  | password  | Read, Write, Delete (Alles, auch User)                  |
+| viewer | Viewer | 123456789 | nur Read, kein Zugriff auf Usertabelle                  |
+
 
 > Die Testnutzer werden beim ersten Start automatisch über `db/seeds.rb` angelegt.
 
@@ -200,6 +207,8 @@ bin/rubocop
 
 ## Bekannte Einschränkungen
 
+  - optionale Features nicht umgesetzt
+  
 ---
 
 ## Contributors
