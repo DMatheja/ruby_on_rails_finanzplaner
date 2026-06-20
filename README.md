@@ -117,20 +117,18 @@ Die Anwendung ist danach unter `http://localhost:3000` erreichbar.
 
 ### Start mit Container
 
-Das Projekt enthält ein `Docker-Compose`. Für den einfachen lokalen Start:
+Das Projekt enthält ein `docker-compose.yml`. Für den einfachen lokalen Start:
 
 1. In das Projekt-Verzeichnis wechseln:
 
 ```bash
-cd /ruby_on_rails_finanzplaner
+cd ruby_on_rails_finanzplaner
 
 ```
 
 2. Build und Start:
-
 ```bash
 sudo docker compose up --build --detach
-
 ```
 
 3. Status prüfen:
@@ -143,14 +141,14 @@ sudo docker compose ps
 4. Datenbank seeden:
 
 ```bash
-sudo docker compose exec web bin/rails db:seed
+sudo docker compose exec app bin/rails db:seed
 
 ```
 
 5. Logs anschauen:
 
 ```bash
-sudo docker compose logs -f web
+sudo docker compose logs -f app
 
 ```
 
@@ -161,7 +159,7 @@ sudo docker compose down
 
 ```
 
-> **Hinweis:** Wenn du die DB komplett neu anlegen willst, kannst du statt `db:seed` auch zuerst `sudo docker compose exec web bin/rails db:setup` ausführen.
+> **Hinweis:** Wenn die DB komplett neu angelegt werden soll, kann statt `db:seed` auch zuerst `sudo docker compose exec app bin/rails db:setup` ausgeführt werden.
 
 **Gestartete Dienste:**
 
