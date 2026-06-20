@@ -42,9 +42,9 @@ class ApplicationController < ActionController::Base
     return unless current_user
     page_name = case request.path
                 when root_path          then 'Dashboard'
-                when products_path      then 'Produkte'
-                when categories_path    then 'Kategorien'
-                when subscriptions_path then 'Abonnements'
+                when products_path      then 'Products'
+                when categories_path    then 'Categories'
+                when subscriptions_path then 'Subscriptions'
                 else request.path
                 end
     current_user.update_columns(

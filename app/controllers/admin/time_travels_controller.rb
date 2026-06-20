@@ -12,21 +12,21 @@ module Admin
       session[:simulated_time] = target.iso8601
       Timecop.travel(target)
       redirect_to admin_time_travel_path,
-        notice: "Zeit gesetzt auf: #{target.strftime('%d.%m.%Y %H:%M')}"
+        notice: "Time set to: #{target.strftime('%m-%d-%Y %H:%M')}"
     end
  
     def destroy
       session.delete(:simulated_time)
       Timecop.return
       redirect_to admin_time_travel_path,
-        notice: 'Echtzeit wiederhergestellt.'
+        notice: 'Real time restored.'
     end
  
     private
  
     def require_admin
       unless current_user&.admin?
-        redirect_to root_path, alert: 'Kein Zugriff.'
+        redirect_to root_path, alert: 'No access!'
       end
     end
   end
