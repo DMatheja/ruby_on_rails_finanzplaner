@@ -88,7 +88,7 @@ test/
 
 ```bash
 # 1. Repository klonen
-git clone <repo-url>
+git clone https://github.com/DMatheja/ruby_on_rails_finanzplaner.git
 cd ruby_on_rails_finanzplaner
 ```
 
