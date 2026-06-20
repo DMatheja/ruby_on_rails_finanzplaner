@@ -208,5 +208,5 @@ bin/rubocop
 | Name          | Matrikelnummer |
 | ------------- | -------------- |
 | Simon Hauck   | 7182169        |
-| David Matheja | matrikel no    |
+| David Matheja | 9809395    |
 | Leon Scherer  | 4348355        |
