@@ -95,7 +95,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
     authorize_product_access
     @product.update(status: 'purchased')
-    redirect_to products_path, notice: "✓ '#{@product.name}' wurde als gekauft markiert."
+    redirect_to products_path, notice: "✓ '#{@product.name}' was marked as purchased."
   end
 
   private

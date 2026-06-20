@@ -66,7 +66,7 @@ class CategoriesController < ApplicationController
     authorize_category_access
     @product = @category.products.find(params[:product_id])
     @product.update(category_id: nil)
-    redirect_to @category, notice: "↩ '#{@product.name}' wurde aus der Kategorie entfernt."
+    redirect_to @category, notice: "↩ '#{@product.name}' was removed from the category."
   end
 
   private
