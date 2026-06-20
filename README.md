@@ -89,7 +89,7 @@ test/
 ```bash
 # 1. Repository klonen
 git clone <repo-url>
-cd rails_finanzplaner
+cd ruby_on_rails_finanzplaner
 ```
 
 ```bash
