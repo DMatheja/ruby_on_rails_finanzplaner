@@ -1,8 +1,8 @@
 # app/controllers/sessions_controller.rb
-require './lib/security_dictionary'
+require "./lib/security_dictionary"
 
 class SessionsController < ApplicationController
-  skip_before_action :require_login, only: [:new, :create, :attack]
+  skip_before_action :require_login, only: [ :new, :create, :attack ]
 
   def new
     @users = User.all
@@ -10,14 +10,19 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find(params[:user_id])
-    
+    @user = User.find_by(name: params[:user_name])
+
+    unless @user
+      redirect_to new_session_path, alert: "Benutzer nicht gefunden."
+      return
+    end
+
     # Check if user is locked out
     if @user.locked_out?
       redirect_to new_session_path, alert: "Account temporarily locked. Try again in 15 minutes."
       return
     end
-    
+
     # Validate password
     if @user.authenticate(params[:password])
       @user.reset_attempts
@@ -26,13 +31,13 @@ class SessionsController < ApplicationController
     else
       @user.increment_failed_attempts
       remaining = User::MAX_ATTEMPTS - @user.failed_attempts
-      
+
       if @user.locked_out?
         alert = "Too many failed attempts. Account locked for 15 minutes."
       else
         alert = "Invalid password. #{remaining} attempts remaining."
       end
-      
+
       redirect_to new_session_path, alert: alert
     end
   end
@@ -41,7 +46,7 @@ class SessionsController < ApplicationController
     @users = User.all
     @dictionary_words = SecurityDictionary::WORDS
     @selected_user = User.find(params[:user_id]) if params[:user_id].present?
-    
+
     if request.post? && @selected_user
       attempted_password = params[:password]
       result = if @selected_user.authenticate(attempted_password)
@@ -49,9 +54,9 @@ class SessionsController < ApplicationController
       else
         { success: false, message: "✗ Incorrect password: #{attempted_password}" }
       end
-      
+
       render json: result
-      return
+      nil
     end
   end
 
