@@ -117,22 +117,51 @@ Die Anwendung ist danach unter `http://localhost:3000` erreichbar.
 
 ### Start mit Container
 
-Das Projekt enthält ein produktionsreifes `Dockerfile`. Für den einfachen lokalen Start:
+Das Projekt enthält ein `Docker-Compose`. Für den einfachen lokalen Start:
+
+1. In das Projekt-Verzeichnis wechseln:
 
 ```bash
-# Image bauen
-docker build -t finanzplaner .
+cd /ruby_on_rails_finanzplaner
+
 ```
+
+2. Build und Start:
 
 ```bash
-# Container starten (RAILS_MASTER_KEY aus config/master.key eintragen)
-docker run -d -p 80:80 \
-  -e RAILS_MASTER_KEY=<wert_aus_config/master.key> \
-  --name finanzplaner \
-  finanzplaner
+sudo docker compose up --build --detach
+
 ```
 
-> **Hinweis:** Beim Start des Containers wird `bin/docker-entrypoint` automatisch ausgeführt, welches `rails db:prepare` aufruft – die Datenbank wird also beim ersten Start automatisch erstellt und migriert. Testdaten müssen ggf. separat mit `rails db:seed` geladen werden.
+3. Status prüfen:
+
+```bash
+sudo docker compose ps
+
+```
+
+4. Datenbank seeden:
+
+```bash
+sudo docker compose exec web bin/rails db:seed
+
+```
+
+5. Logs anschauen:
+
+```bash
+sudo docker compose logs -f web
+
+```
+
+6. Beenden:
+
+```bash
+sudo docker compose down
+
+```
+
+> **Hinweis:** Wenn du die DB komplett neu anlegen willst, kannst du statt `db:seed` auch zuerst `sudo docker compose exec web bin/rails db:setup` ausführen.
 
 **Gestartete Dienste:**
 
@@ -168,11 +197,6 @@ docker run -d -p 80:80 \
 ```bash
 # Unit- und Integrationstests ausführen
 bin/rails db:test:prepare test
-```
-
-```bash
-# System-Tests ausführen
-bin/rails db:test:prepare test:system
 ```
 
 ```bash
@@ -216,5 +240,5 @@ bin/rubocop
 | Name          | Matrikelnummer |
 | ------------- | -------------- |
 | Simon Hauck   | 7182169        |
-| David Matheja | 9809395    |
+| David Matheja | 9809395        |
 | Leon Scherer  | 4348355        |
