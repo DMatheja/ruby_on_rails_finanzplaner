@@ -31,15 +31,6 @@ viewer = User.find_or_create_by!(name: "viewer") do |u|
   u.income_day            = 15
 end
 
-testadmin = User.find_or_create_by!(name: "testadmin") do |u|
-  u.password              = "qwerty"
-  u.password_confirmation = "qwerty"
-  u.role                  = 0       # admin
-  u.balance               = 99999.0
-  u.income                = 9999.0
-  u.income_day            = 1
-end
-
 # ---------------------------------------------------------------------------
 # Kategorien für "max"
 # ---------------------------------------------------------------------------

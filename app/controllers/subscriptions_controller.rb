@@ -1,10 +1,10 @@
 # app/controllers/subscriptions_controller.rb
 class SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_access, only: [:edit, :update, :destroy, :new, :create]
+  before_action :set_subscription, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_access, only: [ :edit, :update, :destroy, :new, :create ]
 
   def index
-    @subscriptions = current_user.subscriptions
+    @subscriptions = current_user.admin? ? Subscription.all.includes(:user).order(:user_id) : current_user.subscriptions
   end
 
   def show
@@ -18,7 +18,7 @@ class SubscriptionsController < ApplicationController
   def create
     @subscription = current_user.subscriptions.build(subscription_params)
     if @subscription.save
-      redirect_to @subscription, notice: 'Subscription was successfully created.'
+      redirect_to @subscription, notice: "Subscription was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,7 +31,7 @@ class SubscriptionsController < ApplicationController
   def update
     authorize_subscription_access
     if @subscription.update(subscription_params)
-      redirect_to @subscription, notice: 'Subscription was successfully updated.'
+      redirect_to @subscription, notice: "Subscription was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,7 +40,7 @@ class SubscriptionsController < ApplicationController
   def destroy
     authorize_subscription_access
     @subscription.destroy
-    redirect_to subscriptions_url, notice: 'Subscription was successfully deleted.'
+    redirect_to subscriptions_url, notice: "Subscription was successfully deleted."
   end
 
   private
@@ -51,13 +51,13 @@ class SubscriptionsController < ApplicationController
 
   def authorize_access
     unless current_user.admin? || current_user.user?
-      redirect_to root_path, alert: 'You do not have permission to create subscriptions.'
+      redirect_to root_path, alert: "You do not have permission to create subscriptions."
     end
   end
 
   def authorize_subscription_access
     unless current_user.admin? || current_user.id == @subscription.user_id
-      redirect_to root_path, alert: 'You do not have permission to access this subscription.'
+      redirect_to root_path, alert: "You do not have permission to access this subscription."
     end
   end
 

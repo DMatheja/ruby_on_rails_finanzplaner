@@ -12,6 +12,12 @@
     </div>
   <% end %>
 
+  <% if current_user.admin? %>
+    <div style="background: #f0f0f0; padding: 12px 15px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; color: #555;">
+      <strong>Owner:</strong> <%= @subscription.user.name %>
+    </div>
+  <% end %>
+
   <%= form_with(model: @subscription, local: true, data: { turbo: false }) do |form| %>
     <div style="margin-bottom: 20px;">
       <%= form.label :name, "Subscription Name", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>

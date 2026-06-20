@@ -2,6 +2,9 @@
   <h2 style="margin-top: 0;"><%= @subscription.name %></h2>
 
   <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <% if current_user.admin? %>
+      <p style="margin: 0 0 10px 0; color: #888;"><strong>Owner:</strong> <%= @subscription.user.name %></p>
+    <% end %>
     <p style="margin: 0 0 10px 0;"><strong>Price:</strong> € <%= number_with_precision(@subscription.price, precision: 2) %> / <%= @subscription.frequency.titleize %></p>
     <p style="margin: 0;"><strong>Started:</strong> <%= @subscription.start_date.strftime("%d.%m.%Y") %></p>
   </div>

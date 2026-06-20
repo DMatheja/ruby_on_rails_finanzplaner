@@ -10,6 +10,9 @@
         <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
           <th style="padding: 12px; text-align: left;">Name</th>
           <th style="padding: 12px; text-align: right;">Price</th>
+          <% if current_user.admin? %>
+            <th style="padding: 12px; text-align: left;">Owner</th>
+          <% end %>
           <th style="padding: 12px; text-align: center;">Frequency</th>
           <th style="padding: 12px; text-align: left;">Start Date</th>
         </tr>
@@ -19,6 +22,9 @@
           <tr style="border-bottom: 1px solid #eee;">
             <td style="padding: 12px;"><%= link_to subscription.name, subscription_path(subscription), style: "color: #0066cc; text-decoration: none;" %></td>
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(subscription.price, precision: 2) %></td>
+            <% if current_user.admin? %>
+              <td style="padding: 12px; font-size: 12px; color: #888;"><strong><%= subscription.user.name %></strong></td>
+            <% end %>
             <td style="padding: 12px; text-align: center;"><%= subscription.frequency.titleize %></td>
             <td style="padding: 12px;"><%= subscription.start_date.strftime("%d.%m.%Y") %></td>
           </tr>
