@@ -15,7 +15,7 @@
   <%= form_with(model: @product, local: true) do |form| %>
     <div style="margin-bottom: 20px;">
       <%= form.label :category_id, "Category", style: "display: block; margin-bottom: 8px; font-weight: bold;" %>
-      <%= form.select :category_id, @categories.map { |c| [c.name, c.id] }, {}, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
+      <%= form.select :category_id, @categories.map { |c| [current_user.admin? ? "#{c.name} (#{c.user.name})" : c.name, c.id] }, {}, style: "width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box;" %>
     </div>
 
     <div style="margin-bottom: 20px;">

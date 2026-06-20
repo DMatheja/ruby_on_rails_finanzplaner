@@ -13,6 +13,9 @@
         <tr style="background:#f5f5f5; border-bottom:2px solid #ddd;">
           <th style="padding:12px; text-align:left;">Product</th>
           <th style="padding:12px; text-align:left;">Category</th>
+          <% if current_user.admin? %>
+            <th style="padding: 12px; text-align: left;">Created by</th>
+          <% end %>
           <th style="padding:12px; text-align:right;">Price</th>
           <th style="padding:12px; text-align:center;">Amount</th>
           <th style="padding:12px; text-align:right;">Total</th>
@@ -25,8 +28,11 @@
           <tr style="border-bottom:1px solid #eee;">
             <td style="padding:12px;"><%= product.name %></td>
             <td style="padding:12px;">
-              <%= product.category&.name || 'Keine Kategorie' %>
+              <%= product.category&.name || 'No Category' %>
             </td>
+            <% if current_user.admin? %>
+              <td style="padding: 12px; color: #888;"><%= product.owner&.name || "—" %></td>
+            <% end %>
             <td style="padding:12px; text-align:right;">
               € <%= number_with_precision(product.price, precision: 2) %>
             </td>

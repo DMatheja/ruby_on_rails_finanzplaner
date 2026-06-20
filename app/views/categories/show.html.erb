@@ -1,5 +1,8 @@
 <div style="max-width: 800px; margin: 40px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
   <h2 style="margin-top: 0;"><%= @category.name %></h2>
+  <% if current_user.admin? %>
+    <p style="margin: -10px 0 20px 0; color: #888; font-size: 14px;">Created by: <strong><%= @category.user.name %></strong></p>
+  <% end %>
   <div style="margin-bottom: 30px;">
     <h3>Pending products</h3>
     <% if @category.products.any? %>

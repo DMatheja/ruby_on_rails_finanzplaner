@@ -4,9 +4,15 @@ class ProductsController < ApplicationController
   before_action :authorize_access, only: [:edit, :update, :destroy, :new, :create]
 
   def index
-    user_category_ids = current_user.categories.pluck(:id)
-    @categories = current_user.categories
-    @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids)
+    if current_user.admin?
+      @categories = Category.all
+      @products = Product.all.includes(category: :user)
+    else
+      user_category_ids = current_user.categories.pluck(:id)
+      @categories = current_user.categories
+      @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids)
+    end
+
     if params[:category_id].present?
       @selected_category = params[:category_id]
       @products = @products.where(category_id: params[:category_id])
@@ -20,26 +26,26 @@ class ProductsController < ApplicationController
 
   def new
     @product = Product.new
-    @categories = current_user.categories
+    @categories = current_user.admin? ? Category.all.includes(:user) : current_user.categories
   end
 
   def create
     @product = Product.new(product_params)
     if product_params[:category_id].present?
-      category = current_user.categories.find(product_params[:category_id])
+      category = current_user.admin? ? Category.find(product_params[:category_id]) : current_user.categories.find(product_params[:category_id])
       @product.category = category
     end
     if @product.save
       redirect_to @product, notice: 'Product was successfully created.'
     else
-      @categories = current_user.categories
+      @categories = current_user.admin? ? Category.all.includes(:user) : current_user.categories
       render :new
     end
   end
 
   def edit
     authorize_product_access
-    @categories = current_user.categories
+    @categories = current_user.admin? ? Category.all.includes(:user) : current_user.categories
   end
 
   def update
@@ -58,8 +64,12 @@ class ProductsController < ApplicationController
   end
 
   def purchased
-    user_category_ids = current_user.categories.pluck(:id)
-    @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids).where(status: 'purchased').order(updated_at: :desc)
+    if current_user.admin?
+      @products = Product.where(status: 'purchased').includes(category: :user).order(updated_at: :desc)
+    else
+      user_category_ids = current_user.categories.pluck(:id)
+      @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids).where(status: 'purchased').order(updated_at: :desc)
+    end
   end
 
   def rebuy

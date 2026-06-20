@@ -22,6 +22,9 @@
         <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
           <th style="padding: 12px; text-align: left;">Product</th>
           <th style="padding: 12px; text-align: left;">Category</th>
+          <% if current_user.admin? %>
+            <th style="padding: 12px; text-align: left;">Created by</th>
+          <% end %>
           <th style="padding: 12px; text-align: right;">Price</th>
           <th style="padding: 12px; text-align: center;">Qty</th>
           <th style="padding: 12px; text-align: right;">Total</th>
@@ -32,6 +35,9 @@
           <tr style="border-bottom: 1px solid #eee;">
             <td style="padding: 12px;"><%= link_to product.name, product_path(product), style: "color: #0066cc; text-decoration: none;" %></td>
             <td style="padding: 12px;"><%= product.category&.name || "No category" %></td>
+            <% if current_user.admin? %>
+              <td style="padding: 12px; color: #888;"><%= product.owner&.name || "—" %></td>
+            <% end %>
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price, precision: 2) %></td>
             <td style="padding: 12px; text-align: center;"><%= product.amount %></td>
             <td style="padding: 12px; text-align: right;">€ <%= number_with_precision(product.price * product.amount, precision: 2) %></td>

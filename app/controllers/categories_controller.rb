@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
   before_action :authorize_access, only: [:edit, :update, :destroy, :new, :create]
 
   def index
-    @categories = current_user.categories
+    @categories = current_user.admin? ? Category.all.includes(:user).order(:user_id) : current_user.categories
   end
 
   def show
