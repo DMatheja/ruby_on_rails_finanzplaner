@@ -3,6 +3,85 @@
   <% if current_user.admin? %>
     <p style="margin: -10px 0 20px 0; color: #888; font-size: 14px;">Created by: <strong><%= @category.user.name %></strong></p>
   <% end %>
+  <div style="margin-bottom: 20px;">
+  <button onclick="document.getElementById('add-product-modal').style.display='flex'"
+          style="background: #0066cc; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">
+    + Add Product
+  </button>
+</div>
+
+<div id="add-product-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:1000;">
+  <div style="background:white; border-radius:10px; padding:25px; width:90%; max-width:500px; max-height:90vh; overflow-y:auto;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3 style="margin:0;">Add Product</h3>
+      <span onclick="document.getElementById('add-product-modal').style.display='none'" style="cursor:pointer; font-size:20px;">✕</span>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-bottom:20px;">
+      <button type="button" id="tab-new" onclick="showAddProductTab('new')"
+              style="flex:1; padding:8px; border:none; border-radius:6px; cursor:pointer; background:#0066cc; color:white;">
+        New Product
+      </button>
+      <button type="button" id="tab-existing" onclick="showAddProductTab('existing')"
+              style="flex:1; padding:8px; border:none; border-radius:6px; cursor:pointer; background:#eee; color:#333;">
+        Existing Product
+      </button>
+    </div>
+
+    <!-- Tab 1: Neues Produkt erstellen -->
+    <div id="panel-new">
+      <%= form_with(url: products_path, method: :post, scope: :product, local: true) do |form| %>
+        <%= hidden_field_tag :return_to_category_id, @category.id %>
+        <%= form.hidden_field :category_id, value: @category.id %>
+
+        <div style="margin-bottom: 15px;">
+          <%= form.label :name, "Product name", style: "display:block; margin-bottom:6px; font-weight:bold;" %>
+          <%= form.text_field :name, style: "width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;" %>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <%= form.label :price, "Price (€)", style: "display:block; margin-bottom:6px; font-weight:bold;" %>
+          <%= form.number_field :price, step: 0.01, style: "width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;" %>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <%= form.label :amount, "Quantity", style: "display:block; margin-bottom:6px; font-weight:bold;" %>
+          <%= form.number_field :amount, value: 1, min: 1, style: "width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;" %>
+        </div>
+
+        <%= form.submit "Create & Add", style: "width:100%; padding:10px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer;" %>
+      <% end %>
+    </div>
+
+    <!-- Tab 2: Vorhandenes Produkt zuweisen -->
+    <div id="panel-existing" style="display:none;">
+      <% unassigned_products = Product.where(category_id: nil) %>
+      <% if unassigned_products.any? %>
+        <%= form_with(url: assign_product_category_path(@category), method: :patch, local: true) do %>
+          <div style="margin-bottom: 15px;">
+            <%= label_tag :product_id, "Choose product", style: "display:block; margin-bottom:6px; font-weight:bold;" %>
+            <%= select_tag :product_id, options_from_collection_for_select(unassigned_products, :id, :name),
+                  style: "width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;" %>
+          </div>
+          <%= submit_tag "Add", style: "width:100%; padding:10px; background:#0066cc; color:white; border:none; border-radius:6px; cursor:pointer;" %>
+        <% end %>
+      <% else %>
+        <p style="color:#999;">There are currently no products without a category.</p>
+      <% end %>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function showAddProductTab(tab) {
+    document.getElementById('panel-new').style.display = tab === 'new' ? 'block' : 'none';
+    document.getElementById('panel-existing').style.display = tab === 'existing' ? 'block' : 'none';
+    document.getElementById('tab-new').style.background = tab === 'new' ? '#0066cc' : '#eee';
+    document.getElementById('tab-new').style.color = tab === 'new' ? 'white' : '#333';
+    document.getElementById('tab-existing').style.background = tab === 'existing' ? '#0066cc' : '#eee';
+    document.getElementById('tab-existing').style.color = tab === 'existing' ? 'white' : '#333';
+  }
+</script>
   <div style="margin-bottom: 30px;">
     <h3>Pending products</h3>
     <% if @category.products.any? %>

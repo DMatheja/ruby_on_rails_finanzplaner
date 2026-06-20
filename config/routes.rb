@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       patch :mark_all_purchased
       patch :mark_product_purchased
       patch :remove_product
+      patch :assign_product
     end
   end
   resources :products do
