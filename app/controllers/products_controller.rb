@@ -1,7 +1,7 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_access, only: [:edit, :update, :destroy, :new, :create]
+  before_action :set_product, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_access, only: [ :edit, :update, :destroy, :new, :create ]
 
   def index
     if current_user.admin?
@@ -10,14 +10,14 @@ class ProductsController < ApplicationController
     else
       user_category_ids = current_user.categories.pluck(:id)
       @categories = current_user.categories
-      @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids)
+      @products = Product.where("category_id IN (?) OR category_id IS NULL", user_category_ids)
     end
 
     if params[:category_id].present?
       @selected_category = params[:category_id]
       @products = @products.where(category_id: params[:category_id])
     end
-    @products = @products.where.not(status: 'purchased')
+    @products = @products.where.not(status: "purchased")
   end
 
   def show
@@ -36,7 +36,11 @@ class ProductsController < ApplicationController
       @product.category = category
     end
     if @product.save
-      redirect_to @product, notice: 'Product was successfully created.'
+      if params[:return_to_category_id].present?
+        redirect_to category_path(params[:return_to_category_id]), notice: "✚ '#{@product.name}' was created and added to this category."
+      else
+        redirect_to @product, notice: "Product was successfully created."
+      end
     else
       @categories = current_user.admin? ? Category.all.includes(:user) : current_user.categories
       render :new
@@ -51,7 +55,7 @@ class ProductsController < ApplicationController
   def update
     authorize_product_access
     if @product.update(product_params)
-      redirect_to @product, notice: 'Product was successfully updated.'
+      redirect_to @product, notice: "Product was successfully updated."
     else
       render :edit
     end
@@ -60,22 +64,22 @@ class ProductsController < ApplicationController
   def destroy
     authorize_product_access
     @product.destroy
-    redirect_to products_url, notice: 'Product was successfully deleted.'
+    redirect_to products_url, notice: "Product was successfully deleted."
   end
 
   def purchased
     if current_user.admin?
-      @products = Product.where(status: 'purchased').includes(category: :user).order(updated_at: :desc)
+      @products = Product.where(status: "purchased").includes(category: :user).order(updated_at: :desc)
     else
       user_category_ids = current_user.categories.pluck(:id)
-      @products = Product.where('category_id IN (?) OR category_id IS NULL', user_category_ids).where(status: 'purchased').order(updated_at: :desc)
+      @products = Product.where("category_id IN (?) OR category_id IS NULL", user_category_ids).where(status: "purchased").order(updated_at: :desc)
     end
   end
 
   def rebuy
     @product = Product.find(params[:id])
     authorize_product_access
-    @product.update(status: 'pending')
+    @product.update(status: "pending")
     redirect_to purchased_products_path, notice: "↩ '#{@product.name}' was added to the shopping list."
   end
 
@@ -84,11 +88,10 @@ class ProductsController < ApplicationController
     authorize_product_access_for(original)
 
     new_product = original.dup
-    new_product.status = 'pending'
+    new_product.status = "pending"
     new_product.save!
 
     redirect_to purchased_products_path, notice: "✚ '#{original.name}' was re-added as a new product."
-
   end
 
   def mark_purchased
@@ -106,7 +109,7 @@ class ProductsController < ApplicationController
 
   def authorize_access
     unless current_user.admin? || current_user.user?
-      redirect_to root_path, alert: 'You do not have permission to create products.'
+      redirect_to root_path, alert: "You do not have permission to create products."
     end
   end
 
@@ -114,8 +117,8 @@ class ProductsController < ApplicationController
     unless current_user.admin? ||
       (current_user.user? && product.category&.user_id == current_user.id) ||
       (current_user.user? && product.category_id.nil?)
-      redirect_to root_path, alert: 'You do not have permission to access this product.'
-      end
+      redirect_to root_path, alert: "You do not have permission to access this product."
+    end
     end
 
 
@@ -123,7 +126,7 @@ class ProductsController < ApplicationController
     unless current_user.admin? ||
       (current_user.user? && @product.category&.user_id == current_user.id) ||
       (current_user.user? && @product.category_id.nil?)
-      redirect_to root_path, alert: 'You do not have permission to access this product.'
+      redirect_to root_path, alert: "You do not have permission to access this product."
     end
   end
 

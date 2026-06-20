@@ -1,6 +1,6 @@
 # app/controllers/categories_controller.rb
 class CategoriesController < ApplicationController
-  before_action :set_category, only: [ :show, :edit, :update, :destroy, :mark_product_purchased, :mark_all_purchased, :remove_product ]
+  before_action :set_category, only: [ :show, :edit, :update, :destroy, :mark_product_purchased, :mark_all_purchased, :remove_product, :assign_product ]
   before_action :authorize_access, only: [ :edit, :update, :destroy, :new, :create ]
 
   def index
@@ -67,6 +67,13 @@ class CategoriesController < ApplicationController
     @product = @category.products.find(params[:product_id])
     @product.update(category_id: nil)
     redirect_to @category, notice: "↩ '#{@product.name}' was removed from the category."
+  end
+
+  def assign_product
+    authorize_category_access
+    @product = Product.where(category_id: nil).find(params[:product_id])
+    @product.update(category_id: @category.id)
+    redirect_to @category, notice: "✚ '#{@product.name}' was added to this category."
   end
 
   private
